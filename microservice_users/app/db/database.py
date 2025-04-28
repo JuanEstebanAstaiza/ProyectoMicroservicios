@@ -3,12 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # --- URL Hardcodeada ---
-# ¡ADVERTENCIA! Esto no es recomendable para producción.
-# Reemplaza con los datos reales de tu conexión a PostgreSQL.
-# Si usas Docker Compose/K8s, el host será el nombre del servicio de la BD.
-# Ejemplo para desarrollo local: "postgresql://user:password@localhost:5432/users_db"
-# Ejemplo para Docker Compose (si el servicio se llama 'db_users'): "postgresql://user:password@db_users:5432/users_db"
-SQLALCHEMY_DATABASE_URL = "postgresql://user:password@localhost:5432/users_db"
+# ¡ADVERTENCIA! No es recomendable para producción.
+# Usa el nombre del servicio definido en docker-compose.yml o Kubernetes
+SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgres-db:5432/users_db"
+#                                           ^^^^^^^^^^^ (Nombre del servicio de la BD Postgres)
 # ----------------------
 
 # Crear el motor SQLAlchemy

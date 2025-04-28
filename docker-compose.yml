@@ -1,0 +1,85 @@
+version: '3.8' # Especifica la versión de Docker Compose
+
+services:
+  # --- Base de Datos PostgreSQL para microservice-users ---
+  postgres-db:
+    image: postgres:15-alpine # Usar una imagen específica de Postgres (alpine es más ligera)
+    container_name: postgres_db_container # Nombre opcional para el contenedor
+    environment:
+      # Estas variables DEBEN coincidir con las credenciales hardcodeadas
+      # en microservice_users/app/db/database.py (o idealmente, pasarlas desde aquí)
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users_db
+    volumes:
+      # Montar volumen para persistencia de datos de Postgres
+      - postgres_data:/var/lib/postgresql/data
+      # Montar el script de inicialización SQL para que se ejecute al inicio
+      - ./init_users_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      # Mapear puerto del contenedor al host (opcional, útil para conectar desde fuera)
+      - "5432:5432"
+    networks:
+      - backend_network # Conectar a la red definida abajo
+    restart: unless-stopped # Reiniciar si se detiene inesperadamente
+
+  # --- Base de Datos MongoDB para microservice-content ---
+  mongo-db:
+    image: mongo:latest # Usar imagen oficial de Mongo
+    container_name: mongo_db_container
+    volumes:
+      # Montar volumen para persistencia de datos de MongoDB
+      - mongo_data:/data/db
+    ports:
+      # Mapear puerto del contenedor al host (opcional)
+      - "27017:27017"
+    networks:
+      - backend_network
+    restart: unless-stopped
+    # Nota: MongoDB no tiene un sistema simple como docker-entrypoint-initdb.d
+    # El script init_content_db.py se ejecutaría manualmente o como otro servicio/job.
+
+  # --- Microservicio de Usuarios ---
+  users-service:
+    build:
+      context: ./microservice_users # Directorio donde está el Dockerfile de users
+      dockerfile: Dockerfile
+    container_name: users_service_container
+    ports:
+      # Mapear puerto de la app al host
+      - "8000:8000" # Host:Contenedor
+    depends_on:
+      # Esperar a que la base de datos esté lista (básico, no garantiza que esté lista para aceptar conexiones)
+      - postgres-db
+    networks:
+      - backend_network
+    restart: on-failure # Reiniciar si falla
+
+  # --- Microservicio de Contenido ---
+  content-service:
+    build:
+      context: ./microservice_content # Directorio donde está el Dockerfile de content
+      dockerfile: Dockerfile
+    container_name: content_service_container
+    ports:
+      # Mapear puerto de la app al host (diferente al de users)
+      - "8001:8001" # Host:Contenedor
+    depends_on:
+      - mongo-db
+    networks:
+      - backend_network
+    restart: on-failure
+
+# --- Redes ---
+# Definir una red personalizada permite que los contenedores se comuniquen por nombre de servicio
+networks:
+  backend_network:
+    driver: bridge # Driver de red por defecto
+
+# --- Volúmenes ---
+# Definir volúmenes nombrados para la persistencia de datos de las BDs
+volumes:
+  postgres_data:
+    driver: local # Usar el driver de volumen local por defecto
+  mongo_data:
+    driver: local

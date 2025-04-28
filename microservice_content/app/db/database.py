@@ -6,8 +6,10 @@ import os
 from microservice_content.app.schemas.content import ContentItem # Ahora ContentItem es el Document
 
 # --- URL Hardcodeada para MongoDB ---
-MONGO_DATABASE_URL = "mongodb://localhost:27017/"
-DATABASE_NAME = "content_db_async" # Usar un nombre de BD diferente si quieres
+# Usa el nombre del servicio definido en docker-compose.yml o Kubernetes
+MONGO_DATABASE_URL = "mongodb://mongo-db:27017/"
+#                              ^^^^^^^^ (Nombre del servicio de la BD Mongo)
+DATABASE_NAME = "mongo-db"
 # ----------------------------------
 
 async def init_db():

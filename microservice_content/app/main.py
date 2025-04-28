@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from app.api import content # Importar el router
-from app.db.database import init_db # Importar la función de inicialización de Beanie
+from microservice_content.app.api import content # Importar el router
+from microservice_content.app.db.database import init_db # Importar la función de inicialización de Beanie
 
 # --- Lifespan para inicializar Beanie ---
 @asynccontextmanager

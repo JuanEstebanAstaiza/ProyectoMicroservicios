@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from api import users # Importar el router de usuarios
+from microservice_users.app.api import users # Importar el router de usuarios
 from db import database # Importar para crear tablas
-from models import user # Importar el modelo para que Base lo conozca
+from microservice_users.app.schemas import user # Importar el modelo para que Base lo conozca
 
 # --- Creación de Tablas (Opcional - Mejor usar Alembic) ---
 try:

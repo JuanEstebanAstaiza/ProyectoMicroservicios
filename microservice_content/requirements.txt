@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+# pymongo          # No se necesita directamente si usas beanie/motor
+pydantic[email]
+python-dateutil
+# passlib[bcrypt] # Probablemente no necesario aquí
+motor              # Driver async para MongoDB (dependencia de Beanie)
+beanie             # El ODM asíncrono

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
-from app.db.database import Base
+from microservice_users.app.db.database import Base
 
 class User(Base):
     """Modelo ORM para la tabla de usuarios."""

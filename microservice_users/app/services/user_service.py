@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models.user import User as UserModel # Renombrado para evitar conflicto
-from app.schemas.user import UserCreate, UserUpdate
+from microservice_users.app.models.user import User as UserModel # Renombrado para evitar conflicto
+from microservice_users.app.schemas.user import UserCreate, UserUpdate
 from passlib.context import CryptContext # Para hashing de contraseñas
 from fastapi import HTTPException, status
 

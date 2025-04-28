@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from app.db.database import get_db
-from app.schemas.user import User, UserCreate, UserUpdate
-from services import user_service
+from microservice_users.app.db.database import get_db
+from microservice_users.app.schemas.user import User, UserCreate, UserUpdate
+from microservice_users.app.services import user_service
 
 # Crear un router para agrupar las rutas relacionadas con usuarios
 router = APIRouter(

@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary  # Driver de PostgreSQL
+pydantic[email]
+python-dotenv    # Para leer .env en desarrollo (opcional)
+passlib[bcrypt]  # Para hashing de contraseñas

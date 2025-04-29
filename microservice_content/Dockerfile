@@ -11,6 +11,7 @@ WORKDIR /ProyectoMicroservicios
 # Etapa 2: Instalación de dependencias Python
 FROM base AS python-deps
 
+COPY init_content_db.py /ProyectoMicroservicios/init_content_db.py
 COPY requirements.txt /ProyectoMicroservicios/microservice_content/requirements.txt
 WORKDIR /ProyectoMicroservicios/microservice_content
 

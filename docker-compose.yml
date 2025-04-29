@@ -58,17 +58,22 @@ services:
   # --- Microservicio de Contenido ---
   content-service:
     build:
-      context: ./microservice_content # Directorio donde está el Dockerfile de content
+      context: ./microservice_content
       dockerfile: Dockerfile
     container_name: content_service_container
     ports:
-      # Mapear puerto de la app al host (diferente al de users)
-      - "8001:8001" # Host:Contenedor
+      - "8001:8001"
     depends_on:
       - mongo-db
     networks:
       - backend_network
     restart: on-failure
+    # Añadir/Modificar el comando:
+    command: >
+      sh -c "echo 'Ejecutando script de inicialización de BD Content...' &&
+             python /ProyectoMicroservicios/init_content_db.py &&
+             echo 'Iniciando Uvicorn para Content Service...' &&
+             uvicorn microservice_content.app.main:app --host 0.0.0.0 --port 8001"
  # --- Base de Datos Redis para microservice-metrics ---
   redis-db:
     image: redis:7-alpine # Usar imagen oficial de Redis (alpine es ligera)

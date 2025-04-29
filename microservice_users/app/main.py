@@ -15,7 +15,7 @@ except Exception as e:
 # --- Instancia de la Aplicación FastAPI ---
 app = FastAPI(
     title="Microservicio de Usuarios (Hardcoded Config)",
-    description="API para gestionar usuarios (con config. hardcodeada).",
+    description="API para gestionar usuarios (Con config. hardcodeada).",
     version="1.0.1",
 )
 

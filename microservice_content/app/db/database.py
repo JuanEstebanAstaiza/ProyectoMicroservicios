@@ -9,7 +9,7 @@ from microservice_content.app.schemas.content import ContentItem # Ahora Content
 # Usa el nombre del servicio definido en docker-compose.yml o Kubernetes
 MONGO_DATABASE_URL = "mongodb://mongo-db:27017/"
 #                              ^^^^^^^^ (Nombre del servicio de la BD Mongo)
-DATABASE_NAME = "mongo-db"
+DATABASE_NAME = "content_db_async"
 # ----------------------------------
 
 async def init_db():

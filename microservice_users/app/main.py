@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from microservice_users.app.api import users # Importar el router de usuarios
 from microservice_users.app.db import database # Importar para crear tablas
-from microservice_users.app.schemas import user # Importar el modelo para que Base lo conozca
+from microservice_users.app.models import user as UserModel # Importar el modelo para que Base lo conozca
 
 # --- Creación de Tablas (Opcional - Mejor usar Alembic) ---
 try:
-    user.Base.metadata.create_all(bind=database.engine)
+    # 4. Usa el alias del MODELO importado aquí
+    UserModel.Base.metadata.create_all(bind=database.engine) # <- Cambio: Usar UserModel.Base
     print("Tablas creadas (si no existían)")
 except Exception as e:
     print(f"Error al crear tablas: {e}")

@@ -37,7 +37,7 @@ services:
       - backend_network
     restart: unless-stopped
     # Nota: MongoDB no tiene un sistema simple como docker-entrypoint-initdb.d
-    # El script init_content_db.py se ejecutaría manualmente o como otro servicio/job.
+
 
   # --- Microservicio de Usuarios ---
   users-service:

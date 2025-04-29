@@ -69,6 +69,34 @@ services:
     networks:
       - backend_network
     restart: on-failure
+ # --- Base de Datos Redis para microservice-metrics ---
+  redis-db:
+    image: redis:7-alpine # Usar imagen oficial de Redis (alpine es ligera)
+    container_name: redis_db_container
+    volumes:
+      # Montar volumen para persistencia (opcional para Redis si solo es caché/contadores no críticos)
+      - redis_data:/data
+    ports:
+      # Mapear puerto (opcional, útil para depuración con redis-cli desde el host)
+      - "6379:6379"
+    networks:
+      - backend_network
+    restart: unless-stopped
+
+  # --- Microservicio de Métricas ---
+  metrics-service:
+    build:
+      context: ./microservice_metrics # Directorio donde está el Dockerfile de metrics
+      dockerfile: Dockerfile
+    container_name: metrics_service_container
+    ports:
+      # Mapear puerto de la app al host (diferente a los otros)
+      - "8002:8002" # Host:Contenedor
+    depends_on:
+      - redis-db # Depende del servicio Redis
+    networks:
+      - backend_network
+    restart: on-failure
 
 # --- Redes ---
 # Definir una red personalizada permite que los contenedores se comuniquen por nombre de servicio
@@ -82,4 +110,6 @@ volumes:
   postgres_data:
     driver: local # Usar el driver de volumen local por defecto
   mongo_data:
+    driver: local
+  redis_data:
     driver: local

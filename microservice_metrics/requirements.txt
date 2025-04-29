@@ -1,0 +1,4 @@
+fastapi
+uvicorn[standard]
+redis[hiredis]      # Driver de Redis para Python (con parser C opcional para más velocidad)
+pydantic

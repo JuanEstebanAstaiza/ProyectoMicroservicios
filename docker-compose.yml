@@ -73,7 +73,7 @@ services:
       sh -c "echo 'Ejecutando script de inicialización de BD Content...' &&
              python /ProyectoMicroservicios/init_content_db.py &&
              echo 'Iniciando Uvicorn para Content Service...' &&
-             uvicorn microservice_content.app.main:app --host 0.0.0.0 --port 8001"
+             uvicorn microservice_content.app.main:app --host 0.0.0.0 --port 8020"
  # --- Base de Datos Redis para microservice-metrics ---
   redis-db:
     image: redis:7-alpine # Usar imagen oficial de Redis (alpine es ligera)

@@ -83,6 +83,14 @@ class ApiClient:
         url = f"{CONTENT_API_URL}/content/{item_id}"
         return self._make_request("GET", url)
 
+    def create_content_item(self, payload: dict) -> dict | None | bool:
+        """Crea un nuevo ítem de contenido."""
+        url = f"{CONTENT_API_URL}/content/"  # Endpoint POST para crear
+        # El método _make_request ya añade Content-Type: application/json
+        # y maneja errores comunes.
+        # Devuelve el JSON de la respuesta si éxito (201), None si 204 (no aplica aquí), False en error.
+        return self._make_request("POST", url, json=payload)
+
     # --- Métodos para Metrics API ---
     def get_all_metrics(self) -> dict | None | bool:
          url = f"{METRICS_API_URL}/metrics/all"

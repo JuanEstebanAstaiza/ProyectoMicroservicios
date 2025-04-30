@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metrics-service
+  template:
+    metadata:
+      labels:
+        app: metrics-service
+    spec:
+      containers:
+        - name: metrics-service-container
+          # !!! Reemplaza con el nombre de tu imagen si es diferente !!!
+          image: metrics-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8002 # Puerto de main.py [cite: 24]
+          env:
+            # Apuntar al Service de K8s 'redis-db'
+            # (Usado por database.py [cite: 21])
+            - name: REDIS_HOST
+              valueFrom:
+                 configMapKeyRef:
+                   name: backend-config
+                   key: REDIS_HOST # Usamos la clave definida en el configmap
+            - name: REDIS_PORT
+              valueFrom:
+                 configMapKeyRef:
+                   name: backend-config
+                   key: REDIS_PORT
+            - name: REDIS_DB_NUMBER
+              valueFrom:
+                 configMapKeyRef:
+                   name: backend-config
+                   key: REDIS_DB_NUMBER
+          readinessProbe:
+            httpGet:
+              path: / # Ruta raíz definida en main.py [cite: 24]
+              port: 8002
+            initialDelaySeconds: 10 # Redis es rápido
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8002
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            failureThreshold: 3

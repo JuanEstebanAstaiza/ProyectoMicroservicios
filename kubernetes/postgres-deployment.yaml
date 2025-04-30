@@ -1,0 +1,58 @@
+# kubernetes/postgres-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            # ... (variables de entorno POSTGRES_USER, POSTGRES_DB, POSTGRES_PASSWORD usando configMapKeyRef y secretKeyRef como antes) ...
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: postgres-storage # Montaje para datos persistentes (como antes)
+              mountPath: /var/lib/postgresql/data
+            # --- MONTAJE PARA SCRIPT DE INICIALIZACIÓN ---
+            - name: postgres-init-scripts # Nombre del montaje (interno a este pod)
+              mountPath: /docker-entrypoint-initdb.d # Directorio especial de Postgres
+              readOnly: true
+      # --- Definición de Volúmenes ---
+      volumes:
+        - name: postgres-storage # Volumen para datos persistentes (como antes)
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+        # --- VOLUMEN PARA EL SCRIPT SQL ---
+        - name: postgres-init-scripts # Nombre del volumen (debe coincidir con el volumeMount)
+          configMap:
+            name: postgres-init-sql # Nombre del ConfigMap que creaste
+            # Opcional: Especificar qué ítems montar y cómo llamarlos
+            # items:
+            #   - key: init_users_db.sql # Clave en el ConfigMap
+            #     path: init.sql        # Nombre del archivo dentro del contenedor

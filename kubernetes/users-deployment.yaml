@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec:
+  replicas: 1 # Puedes escalar a más si es necesario
+  selector:
+    matchLabels:
+      app: users-service
+  template:
+    metadata:
+      labels:
+        app: users-service
+    spec:
+      containers:
+        - name: users-service-container
+          # !!! Reemplaza con el nombre de tu imagen si es diferente !!!
+          image: users-service:latest
+          # Asumiendo que cargaste la imagen localmente a Minikube
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000 # Puerto que expone la app en main.py [cite: 10]
+          env:
+            # La URL de la BD ahora apunta al Service de K8s 'postgres-db'
+            # (Estas variables las usa directamente database.py [cite: 6])
+            - name: POSTGRES_HOST # No se usa directamente si la URL está hardcodeada, pero buena práctica tenerla
+              value: "postgres-db"
+            - name: POSTGRES_PORT # No se usa directamente
+              value: "5432"
+            # Las credenciales y DB name deben coincidir con las usadas por database.py
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          # --- Probes (Muy Recomendado) ---
+          readinessProbe: # Verifica si el Pod está listo para recibir tráfico
+            httpGet:
+              path: / # Ruta raíz definida en main.py [cite: 10]
+              port: 8000
+            initialDelaySeconds: 15 # Esperar 15s antes de probar la primera vez
+            periodSeconds: 10    # Probar cada 10s
+            failureThreshold: 3  # Considerar fallido después de 3 intentos
+          livenessProbe: # Verifica si el Pod está vivo (reiniciar si falla)
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 3

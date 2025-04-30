@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-db
+  template:
+    metadata:
+      labels:
+        app: mongo-db
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:latest # Imagen de MongoDB
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          # MongoDB usa estas variables si se proveen, pero nuestro script no las necesita directamente
+          # env:
+          #   - name: MONGO_INITDB_DATABASE # Opcional si necesitas crear DB al inicio
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: backend-config
+          #         key: MONGO_INITDB_DATABASE
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db # Ruta de datos de MongoDB
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc

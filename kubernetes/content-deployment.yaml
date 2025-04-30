@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: content-service
+  template:
+    metadata:
+      labels:
+        app: content-service
+    spec:
+      initContainers:
+        - name: init-mongo-content
+          image: content-service:latest # Usa la imagen actualizada con el script corregido
+          imagePullPolicy: IfNotPresent
+          # Comando para ejecutar el script python
+          command: [ 'python', '/ProyectoMicroservicios/init_content_db.py' ]
+          env:
+            - name: PYTHONPATH # Asegura que pueda encontrar módulos si es necesario
+              value: "/ProyectoMicroservicios"
+            # No necesitamos pasar MONGO_URL si lo hardcodeaste en el script
+            # a "mongodb://mongo-db:27017/"
+      containers:
+        - name: content-service-container
+          image: content-service:latest # Usa la misma imagen actualizada
+          imagePullPolicy: IfNotPresent
+          # ... resto de la configuración del contenedor principal (ports, env, probes) sin cambios ...
+          ports:
+            - containerPort: 8001
+          env:
+            - name: MONGO_SERVICE_HOST
+              value: "mongo-db"
+            - name: MONGO_SERVICE_PORT
+              value: "27017"
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: MONGO_INITDB_DATABASE
+            - name: PYTHONPATH
+              value: "/ProyectoMicroservicios"
+          readinessProbe:
+            httpGet:
+              path: / # Ruta raíz definida en main.py [cite: 16]
+              port: 8001
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8001
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 3

@@ -1,0 +1,23 @@
+# En configmap.yaml o postgres-init-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-sql
+data:
+  init_users_db.sql: |
+    --- Crear la tabla 'users' si no existe
+    CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY, -- ID autoincremental como clave primaria
+    email VARCHAR(255) UNIQUE NOT NULL, -- Email único y no nulo
+    hashed_password VARCHAR(255) NOT NULL, -- Contraseña hasheada
+    full_name VARCHAR(255), -- Nombre completo, opcional
+    is_active BOOLEAN DEFAULT TRUE -- Indicador de si el usuario está activo
+    );
+
+    -- Crear índices para búsquedas comunes (opcional pero recomendado)
+    CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
+    CREATE INDEX IF NOT EXISTS idx_users_full_name ON users (full_name);
+
+    -- Mensaje de confirmación (opcional, solo para visualización en psql)
+    \echo "Tabla 'users' creada o ya existente."
+    \echo "Índices en 'email' y 'full_name' creados o ya existentes."

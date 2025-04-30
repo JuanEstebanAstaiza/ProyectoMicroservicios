@@ -3,8 +3,8 @@
 # Etapa 1: Base con Python
 FROM python:3.10-slim AS base
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Directorio de trabajo raíz simulando la raíz del proyecto real
 WORKDIR /ProyectoMicroservicios

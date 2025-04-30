@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc # PVC para Postgres
+spec:
+  accessModes:
+    - ReadWriteOnce # Puede ser montado por un solo nodo (estándar para BDs)
+  resources:
+    requests:
+      storage: 1Gi # Solicitar 1 Gigabyte (ajusta según necesidad)
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc # PVC para MongoDB
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # Solicitar 1 Gigabyte
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc # PVC para Redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi # Redis suele necesitar menos (ajusta si es necesario)

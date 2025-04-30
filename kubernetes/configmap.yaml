@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config # Nombre del ConfigMap
+data:
+  # PostgreSQL Config (basado en compose y database.py [cite: 6])
+  POSTGRES_USER: user
+  POSTGRES_DB: users_db
+
+  # MongoDB Config (basado en database.py [cite: 13])
+  MONGO_INITDB_DATABASE: content_db_async # Nombre de la BD usada por el init script y la app
+  # La URL de conexión se manejará con el nombre del Service 'mongo-db'
+
+  # Redis Config (basado en database.py [cite: 21])
+  REDIS_HOST: redis-db # Nombre del Service de Redis en K8s
+  REDIS_PORT: "6379"   # Puerto del Service de Redis
+  REDIS_DB_NUMBER: "0" # Número de la BD Redis

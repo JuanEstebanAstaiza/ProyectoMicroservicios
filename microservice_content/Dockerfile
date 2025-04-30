@@ -30,4 +30,4 @@ WORKDIR /ProyectoMicroservicios
 EXPOSE 8001
 
 # Comando ajustado para apuntar al módulo dentro de la estructura simulada
-CMD ["uvicorn", "microservice_content.app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uvicorn", "microservice_content.app.main:app", "--host", "0.0.0.0", "--port", "8020"]

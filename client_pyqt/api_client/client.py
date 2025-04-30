@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 # URLs base de las APIs
 USERS_API_URL = "http://localhost:8000"
-CONTENT_API_URL = "http://localhost:8001"
+CONTENT_API_URL = "http://localhost:8020"
 METRICS_API_URL = "http://localhost:8002"
 
 class ApiClient:

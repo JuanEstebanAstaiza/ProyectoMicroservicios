@@ -7,6 +7,6 @@ spec:
     app: content-service
   ports:
     - protocol: TCP
-      port: 8001
-      targetPort: 8001
+      port: 8020
+      targetPort: 8020
   type: ClusterIP

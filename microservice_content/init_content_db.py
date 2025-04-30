@@ -19,7 +19,7 @@ except ImportError:
 
 
 # --- Configuración de Conexión (Hardcodeada) ---
-MONGO_URL = "mongodb://mongo-db:27017/"
+MONGO_URL = "mongodb://localhost:27017/"
 DATABASE_NAME = "content_db_async" # Debe coincidir con la de tu app
 # ---------------------------------------------
 

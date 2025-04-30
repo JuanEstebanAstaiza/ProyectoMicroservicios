@@ -18,7 +18,7 @@ El backend sigue un patrón de microservicios, compuesto por tres servicios prin
     * **Responsabilidad:** Gestionar los ítems de contenido (artículos, notas, etc.) con una estructura flexible.
     * **Tecnología:** Python, FastAPI, Beanie ODM (Async).
     * **Base de Datos:** MongoDB (NoSQL - Documental).
-    * **Puerto:** 8001
+    * **Puerto:** 8020
 
 3.  **Microservicio de Métricas (`microservice_metrics`)**:
     * **Responsabilidad:** Gestionar contadores simples para métricas diversas (ej. visitas).

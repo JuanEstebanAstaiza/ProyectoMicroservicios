@@ -239,6 +239,5 @@ El -d ejecuta los contenedores en segundo plano. Espera a que todas las bases de
 
  * Navega a la carpeta del cliente: cd client_pyqt
  * Instala las dependencias
- * 
-
+   
 

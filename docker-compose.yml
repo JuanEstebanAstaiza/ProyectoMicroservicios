@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile
     container_name: content_service_container
     ports:
-      - "8001:8001"
+      - "8020:8020"
     depends_on:
       - mongo-db
     networks:

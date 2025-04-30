@@ -1,10 +1,8 @@
-# ProyectoMicroservicios - Taller 4 Arquitectura de Software
+# ProyectoMicroservicios
 
 ## Descripción Breve
 
 Este proyecto implementa un sistema backend basado en microservicios con persistencia políglota (PostgreSQL, MongoDB, Redis) para una plataforma simplificada de gestión de contenido. El backend está contenerizado con Docker, orquestado localmente con Docker Compose y preparado para despliegue en Kubernetes (Minikube / Docker Desktop). Incluye también un cliente de escritorio simple desarrollado con PyQt5 que interactúa con el backend exclusivamente a través de sus APIs REST.
-
-Este proyecto fue desarrollado como parte del Taller 4 de Arquitectura de Software.
 
 ## Arquitectura Backend
 
